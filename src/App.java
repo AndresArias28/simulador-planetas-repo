@@ -12,7 +12,7 @@ public class App {
     // Datos de nave
     static String[] ships = { "Falcon 9", "Starship", "SLS" };
     static double[] velocitysShip = { 27_000, 40_000, 29_000 }; // en km/h
-    static int[] capacidadPasajeros = { 2, 4, 3 };
+    static int[] capacidadPasajeros = { 28, 40, 30 };
     // Datos de planetas
     static String[] planets = { "Marte", "Jupiter", "Saturno" };
     static double velocity = 100_000; // km/h
@@ -73,7 +73,7 @@ public class App {
         System.out.println("4. Revisar y ajustar recursos");
         System.out.println("4. Revisar y ajustar recursos");
         System.out.println("5. exit");
-        System.out.println("elige una opción: ");
+        System.out.println("Elige una opción: ");
         var planet = scanner.nextInt();
         String confirm;
         switch (planet) {
@@ -135,6 +135,7 @@ public class App {
         System.out.printf("Comida: %.2f kg%n", calculateResources(estimateTime, averages[1]));
         System.out.printf("Agua: %.2f litros%n", calculateResources(estimateTime, averages[2]));
         System.out.printf("combustible: %.2f Ton%n", calculateResources(estimateTime, averages[3]));
+        planetSelected = planet;
     }
 
     private static double calculateResources(double dias, double estimateAverage) {
@@ -145,41 +146,60 @@ public class App {
         double timeInHours = distance / velocity;
         double timeInDays = timeInHours / 24;
         return timeInDays;
-
     }
+    private static double estimateTimePerShip(double velocitysShip){
+        double timeInHours = distances[planetSelected - 1] / velocitysShip;
+        double timeInDays = timeInHours / 24;
+        return timeInDays;
+    };
 
     public static void selectSpaceship() {
+        if(planetSelected == 0){
+            System.out.println("Primero debes seleccionar un planeta de destino");
+            return;
+        }
         System.out.println("\n--- Naves Disponibles ---");
-        System.out.println("1. Revisar capacidad y velocidad de las naves");
-        System.out.println("2. Falcon 9");
-        System.out.println("3. Starship");
-        System.out.println("4. Soyus");
-        System.out.println("5. Exit");
+        System.out.println("1. Falcon 9");
+        System.out.println("2. Starship");
+        System.out.println("3. Soyus");
+        System.out.println("4. Exit");
         System.out.println("Elige una opción");
-        var Spaceship = scanner.nextInt();
-        switch (Spaceship) {
+        var spaceShip = scanner.nextInt();
+        switch (spaceShip) {
             case 1:
-                System.out.println(
-                        "Falcon 9: Es un vehiculo diseñado y fabricado por SpaceX desarrollado en el año 2011-2013. Cuenta con una capacidad para ocho tripulantes y alcanza una velocidad de 27.000 km/h.");
-                System.out.println(
-                        "Starship: En 2023, con la primera Prueba de vuelo integrada, Starship se convirtió en el vehículo más masivo y más poderoso que jamás haya volado. Cuenta con una capacidad para cinco y alcanza una velocidad de 40.000 km/h");
-                System.out.println(
-                        "Soyus: Forma parte del programa espacial Soyuz de la antigua Unión Soviética. La nave Soyuz puede llevar una tripulación de hasta tres miembros y alcanza una velocidad de 29.000 km/h");
+                int pasajeros;
+                System.out.println("Has seleccionado la nave Falcon 9 (27.000 km/h y 8 tripulantes)");
+                do {
+                    System.out.println("Ingresa el número de pasajeros: ");
+                    pasajeros = scanner.nextInt();
+                    
+                    if (pasajeros < 0) {
+                        System.out.println("No puedes ingresar un número negativo. Por favor, ingresa un número positivo.");
+                    }
+                } while (pasajeros < 0);
+                if (pasajeros <= capacidadPasajeros[0]) {
+                    System.out.println("Has seleccionado " + pasajeros + " pasajeros");
+                    shipSelected = spaceShip;
+                } else {
+                    System.out.println("La nave Falcon 9 no puede llevar todos los pasajeros");
+                }
+                System.out.printf("El tiempo de viaje estimado segun la velocidad de la nave es:  %.2f días%n" , estimateTimePerShip(velocitysShip[spaceShip -1]));
                 break;
+
             case 2:
                 System.out.println("Has seleccionado la nave Falcon 9 (27.000 km/h y 8 tripulantes)");
                 break;
+
             case 3:
                 System.out.println("Has seleccionado la nave Starship (40.000 km/h y cinco tripulantes)");
                 break;
+
             case 4:
-                System.out.println("Has seleccionado la nave Soyus (29.000 y tres tripulantes)");
-                break;
-            case 5:
                 System.out.println("Has salido del programa");
                 break;
+      
             default:
-                System.out.println("opcion no válida");
+                System.out.println("opcion no válida a");
                 break;
         }
     }
