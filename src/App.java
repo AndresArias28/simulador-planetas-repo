@@ -48,7 +48,7 @@ public class App {
                         selectSpaceship();
                         break;
                     case 3:
-                        // calcularRecursos();
+                        startSimulation();
                         break;
                     case 4:
                         System.out.println("Has salido del programa");
@@ -64,6 +64,42 @@ public class App {
             }
         } while (opc != 4);
     }
+
+    private static void startSimulation() {
+        System.out.println("Inicio del viaje");
+    
+        for (int progreso = 0; progreso <= 100; progreso += 2) {
+            // Mensaje de progreso
+            System.out.println("Progreso: " + progreso + " %");
+    
+            // Etapas clave usando if
+            if (progreso == 100  / 2) {
+                System.out.println("¡Has alcanzado la mitad del camino!");
+            }
+    
+            if (progreso == 100) {
+                System.out.println("¡Has llegado al destino!");
+            }
+    
+            // Opcional: Mensajes adicionales usando switch
+            switch (progreso) {
+                case 25:
+                    System.out.println("Etapa 1: 25 km completados. ¡Buen trabajo!");
+                    break;
+                case 75:
+                    System.out.println("Etapa 2: 75 km completados. ¡Casi llegas!");
+                    break;
+            }
+            
+            // Simulación de retraso (opcional)
+            try {
+                Thread.sleep(500); // Pausa de 500 ms para simular el tiempo
+            } catch (InterruptedException e) {
+                System.out.println("Error en la simulación: " + e.getMessage());
+            }
+    
+        }
+}
 
     public static void selectPlanet() {
         System.out.println("\n---Seleccionar un planeta de destino---");
@@ -147,14 +183,15 @@ public class App {
         double timeInDays = timeInHours / 24;
         return timeInDays;
     }
-    private static double estimateTimePerShip(double velocitysShip){
+
+    private static double estimateTimePerShip(double velocitysShip) {
         double timeInHours = distances[planetSelected - 1] / velocitysShip;
         double timeInDays = timeInHours / 24;
         return timeInDays;
     };
 
     public static void selectSpaceship() {
-        if(planetSelected == 0){
+        if (planetSelected == 0) {
             System.out.println("Primero debes seleccionar un planeta de destino");
             return;
         }
@@ -167,41 +204,45 @@ public class App {
         var spaceShip = scanner.nextInt();
         switch (spaceShip) {
             case 1:
-                int pasajeros;
-                System.out.println("Has seleccionado la nave Falcon 9 (27.000 km/h y 8 tripulantes)");
-                do {
-                    System.out.println("Ingresa el número de pasajeros: ");
-                    pasajeros = scanner.nextInt();
-                    
-                    if (pasajeros < 0) {
-                        System.out.println("No puedes ingresar un número negativo. Por favor, ingresa un número positivo.");
-                    }
-                } while (pasajeros < 0);
-                if (pasajeros <= capacidadPasajeros[0]) {
-                    System.out.println("Has seleccionado " + pasajeros + " pasajeros");
-                    shipSelected = spaceShip;
-                } else {
-                    System.out.println("La nave Falcon 9 no puede llevar todos los pasajeros");
-                }
-                System.out.printf("El tiempo de viaje estimado segun la velocidad de la nave es:  %.2f días%n" , estimateTimePerShip(velocitysShip[spaceShip -1]));
+                selectionShipgetPasajeros(spaceShip);
                 break;
 
             case 2:
-                System.out.println("Has seleccionado la nave Falcon 9 (27.000 km/h y 8 tripulantes)");
+                selectionShipgetPasajeros(spaceShip);
                 break;
 
             case 3:
-                System.out.println("Has seleccionado la nave Starship (40.000 km/h y cinco tripulantes)");
+                selectionShipgetPasajeros(spaceShip);
                 break;
 
             case 4:
                 System.out.println("Has salido del programa");
                 break;
-      
+
             default:
                 System.out.println("opcion no válida a");
                 break;
         }
     }
-}
 
+    private static void selectionShipgetPasajeros(int spaceShip) {
+        int pasajeros;
+        System.out.println("Has seleccionado la nave " + ships[spaceShip -1] +"con velocidad de: "+ velocitysShip[spaceShip - 1] +  " y " + capacidadPasajeros[spaceShip - 1] + " tripulantes");
+        do {
+            System.out.println("Ingresa el número de pasajeros: ");
+            pasajeros = scanner.nextInt();
+
+            if (pasajeros < 0) {
+                System.out.println(  "No puedes ingresar un número negativo. Por favor, ingresa un número positivo.");
+            }
+        } while (pasajeros < 0);
+        if (pasajeros <= capacidadPasajeros[0]) {
+            System.out.println("Has seleccionado " + pasajeros + " pasajeros");
+            shipSelected = spaceShip;
+        } else {
+            System.out.println("La nave Falcon 9 no puede llevar todos los pasajeros");
+        }
+        System.out.printf("El tiempo de viaje estimado segun la velocidad de la nave es:  %.2f días%n",
+                estimateTimePerShip(velocitysShip[spaceShip - 1]));
+    }
+}
