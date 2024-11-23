@@ -67,10 +67,17 @@ public class App {
 
     private static void startSimulation() {
         System.out.println("Inicio del viaje");
+        int total = 100; // Valor total
+    int incremento = 5; // Incremento de progreso
     
-        for (int progreso = 0; progreso <= 100; progreso += 2) {
+        for (int progreso = 0; progreso <= total; progreso += 5) {
             // Mensaje de progreso
-            System.out.println("Progreso: " + progreso + " %");
+            int porcentaje = (progreso * 100) / total;
+            String barra = "[" + "=".repeat(progreso / incremento) + " ".repeat((total - progreso) / incremento) + "]";
+
+        // Mostrar la barra y el porcentaje
+            System.out.print("\r" + barra + " " + porcentaje + "%");
+
     
             // Etapas clave usando if
             if (progreso == 100  / 2) {
@@ -88,10 +95,18 @@ public class App {
                     break;
                 case 75:
                     System.out.println("Etapa 2: 75 km completados. ¡Casi llegas!");
+                    System.out.println("falla en el sistema de propulsión");
+                    System.out.println("Reparando el sistema de propulsión...");
+                    try {
+                        Thread.sleep(2000); 
+                    } catch (InterruptedException e) {
+                        System.out.println("Error en la simulación: " + e.getMessage());
+                    }
+                    System.out.println("Reparación completada. ¡Continúa el viaje!");
                     break;
             }
             
-            // Simulación de retraso (opcional)
+            // retraso
             try {
                 Thread.sleep(500); // Pausa de 500 ms para simular el tiempo
             } catch (InterruptedException e) {
@@ -240,7 +255,7 @@ public class App {
             System.out.println("Has seleccionado " + pasajeros + " pasajeros");
             shipSelected = spaceShip;
         } else {
-            System.out.println("La nave Falcon 9 no puede llevar todos los pasajeros");
+            System.out.println("La nave "+ships[spaceShip-1]+" no puede llevar todos los pasajeros");
         }
         System.out.printf("El tiempo de viaje estimado segun la velocidad de la nave es:  %.2f días%n",
                 estimateTimePerShip(velocitysShip[spaceShip - 1]));
