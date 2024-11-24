@@ -15,6 +15,13 @@ public class App {
     static int[] capacidadPasajeros = { 28, 40, 30 };
     // Datos de planetas
     static String[] planets = { "Marte", "Jupiter", "Saturno" };
+    static String[] randomEvents = { "Fallo en el sistema de propulción",
+            "Fallo en el sistema de combustible",
+            "Lluvia de asteroides",
+            "Falla en el sistema de alimentación",
+            "Perdidda de potencia del motor 2",
+            "Objeto no identificado en la trayectoria"
+    };
     static double velocity = 100_000; // km/h
     static double[] averages = { 550, 1.7, 2.5, 350 };// {litros/dia, kg/dia , litros/dia, Ton/dia}
     // ajustar recursos
@@ -25,6 +32,11 @@ public class App {
     static int shipSelected = 0;
     static int planetSelected = 0;
 
+    // Códigos ANSI
+    static final String RESET = "\u001B[0m"; // Restablece el color
+    static final String GREEN = "\u001B[32m"; // Verde
+    static final String BLUE = "\u001B[34m"; // Azul
+
     public static void main(String[] args) throws Exception {
         Menu();
     }
@@ -32,7 +44,7 @@ public class App {
     public static void Menu() {
         int opc;
         do {
-            System.out.println("\n---Menú Principal---");
+            System.out.println(GREEN + "\n---Menú Principal---" + RESET);
             System.out.println("1. Seleccion planeta de destino");
             System.out.println("2. Seleccionar una nave espacial");
             System.out.println("3. Iniciar la simulación del vuelo");
@@ -58,7 +70,7 @@ public class App {
                         break;
                 }
             } else {
-                System.out.println("Por favor, ingresa un número");
+                System.out.println("\n por favor, ingresa un número");
                 scanner.next();
                 opc = 6;
             }
@@ -66,28 +78,41 @@ public class App {
     }
 
     private static void startSimulation() {
+        if (planetSelected == 0 || shipSelected == 0) {
+            System.out.println("Primero debes seleccionar un planeta de destino y una nave espacial");
+            return;
+        }
         System.out.println("Inicio del viaje");
+        delay();
+        System.out.println("¡Prepárate para el despegue!");
+        delay();
+        System.out.println("Despegando en 3, 2, 1...");
+        delay();
+        System.out.println("estas viajando en la nave: " + ships[shipSelected - 1] + " con destino a "
+                + planets[planetSelected - 1]);
+        System.out.println("velocidad de la nave: " + velocitysShip[shipSelected - 1] + " km/h");
+        System.out.println(
+                "Tiempo estimado de viaje estimado: " + estimateTimePerShip(velocitysShip[shipSelected - 1]) + " días");
         int total = 100; // Valor total
-    int incremento = 5; // Incremento de progreso
-    
+        int incremento = 5; // Incremento de progreso
+        delay5();
         for (int progreso = 0; progreso <= total; progreso += 5) {
             // Mensaje de progreso
             int porcentaje = (progreso * 100) / total;
             String barra = "[" + "=".repeat(progreso / incremento) + " ".repeat((total - progreso) / incremento) + "]";
 
-        // Mostrar la barra y el porcentaje
+            // Mostrar la barra y el porcentaje
             System.out.print("\r" + barra + " " + porcentaje + "%");
 
-    
             // Etapas clave usando if
-            if (progreso == 100  / 2) {
+            if (progreso == 100 / 2) {
                 System.out.println("¡Has alcanzado la mitad del camino!");
             }
-    
+
             if (progreso == 100) {
                 System.out.println("¡Has llegado al destino!");
             }
-    
+
             // Opcional: Mensajes adicionales usando switch
             switch (progreso) {
                 case 25:
@@ -97,31 +122,38 @@ public class App {
                     System.out.println("Etapa 2: 75 km completados. ¡Casi llegas!");
                     System.out.println("falla en el sistema de propulsión");
                     System.out.println("Reparando el sistema de propulsión...");
-                    try {
-                        Thread.sleep(2000); 
-                    } catch (InterruptedException e) {
-                        System.out.println("Error en la simulación: " + e.getMessage());
-                    }
+                    delay();
                     System.out.println("Reparación completada. ¡Continúa el viaje!");
                     break;
             }
-            
+
             // retraso
-            try {
-                Thread.sleep(500); // Pausa de 500 ms para simular el tiempo
-            } catch (InterruptedException e) {
-                System.out.println("Error en la simulación: " + e.getMessage());
-            }
-    
+            delay();
+
         }
-}
+    }
+
+    private static void delay() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            System.out.println("Error en la simulación: " + e.getMessage());
+        }
+    }
+
+    private static void delay5() {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            System.out.println("Error en la simulación: " + e.getMessage());
+        }
+    }
 
     public static void selectPlanet() {
-        System.out.println("\n---Seleccionar un planeta de destino---");
+        System.out.println(BLUE + "\n---Seleccionar un planeta de destino---" + RESET);
         System.out.println("1. Marte");
         System.out.println("2. Júpiter");
         System.out.println("3. Saturno");
-        System.out.println("4. Revisar y ajustar recursos");
         System.out.println("4. Revisar y ajustar recursos");
         System.out.println("5. exit");
         System.out.println("Elige una opción: ");
@@ -162,7 +194,7 @@ public class App {
                 break;
 
             case 4:
-                // adjustResource();
+                adjustResource();
                 break;
 
             case 5:
@@ -173,6 +205,11 @@ public class App {
                 System.out.println("opcion no válida");
                 break;
         }
+    }
+
+    private static void adjustResource() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'adjustResource'");
     }
 
     private static void showDataPlanets(int planet) {
@@ -242,22 +279,24 @@ public class App {
 
     private static void selectionShipgetPasajeros(int spaceShip) {
         int pasajeros;
-        System.out.println("Has seleccionado la nave " + ships[spaceShip -1] +"con velocidad de: "+ velocitysShip[spaceShip - 1] +  " y " + capacidadPasajeros[spaceShip - 1] + " tripulantes");
+        System.out.println("Has seleccionado la nave " + ships[spaceShip - 1] + " con velocidad de: "
+                + velocitysShip[spaceShip - 1] + "km/h y " + capacidadPasajeros[spaceShip - 1] + " tripulantes");
         do {
             System.out.println("Ingresa el número de pasajeros: ");
             pasajeros = scanner.nextInt();
 
             if (pasajeros < 0) {
-                System.out.println(  "No puedes ingresar un número negativo. Por favor, ingresa un número positivo.");
+                System.out.println("No puedes ingresar un número negativo. Por favor, ingresa un número positivo.");
             }
         } while (pasajeros < 0);
-        if (pasajeros <= capacidadPasajeros[0]) {
+        if (pasajeros <= capacidadPasajeros[spaceShip - 1]) {
             System.out.println("Has seleccionado " + pasajeros + " pasajeros");
             shipSelected = spaceShip;
         } else {
-            System.out.println("La nave "+ships[spaceShip-1]+" no puede llevar todos los pasajeros");
+            System.out.println("La nave " + ships[spaceShip - 1] + " no puede llevar todos los pasajeros");
         }
         System.out.printf("El tiempo de viaje estimado segun la velocidad de la nave es:  %.2f días%n",
                 estimateTimePerShip(velocitysShip[spaceShip - 1]));
+        shipSelected = spaceShip;
     }
 }
