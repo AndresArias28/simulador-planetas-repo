@@ -126,8 +126,6 @@ public class App {
                         progreso = progreso - 10;
                         randomEvent = 0;
                         porcentaje = (progreso * 100) / total;
-                      //   var timeEstim = estimateTimePerShip(velocitysShip[shipSelected - 1]) * (total - progreso) / 100;
-                        //System.out.printf("\nTiempo estimado de llegada: %.2f días\n", timeEstim);
                         break;
 
                     case 2:
@@ -161,7 +159,6 @@ public class App {
                 System.out.println(" --> has llegado al destino");
             }
 
-            // Opcional: Mensajes adicionales usando switch
             switch (progreso) {
                 case 25:
                     System.out.println("\nEtapa 1: 25 km completados. Buen trabajo");
@@ -169,11 +166,6 @@ public class App {
 
                 case 76:
                     System.out.println("\nEtapa 2: 75 km completados. ¡Casi llegas!");
-                    // System.out.println("falla en el sistema de propulsión");
-                    // System.out.println("Reparando el sistema de propulsión...");
-
-                    // delay();
-                    // System.out.println("Reparación completada. continua el viaje :)");
                     break;
             }
             // retraso
