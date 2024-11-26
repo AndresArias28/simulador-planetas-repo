@@ -6,11 +6,11 @@ public class App {
     // planets description
     static String[] descriptionPlanets = {
             "Marte es el llamado planeta rojo en la mitología romana, seleccionado por su color rojizo, este planeta es el cuarto en el sistema solar y el segundo más pequeño después de Mercurio",
-            " Júpiter es el planeta mas grande del sistema solar y el segundo mas grande despues de Marte",
+            "Júpiter es el planeta mas grande del sistema solar y el segundo mas grande despues de Marte",
             "Saturno es el planeta mas grande del sistema solar y el tercer mas grande despues de Júpiter"
     };
     // Datos de nave
-    static String[] ships = { "Falcon 9", "Starship", "SLS" };
+    static String[] ships = { "Falcon 9", "Starship", "Soyus" };
     static double[] velocitysShip = { 27_000, 40_000, 29_000 }; // en km/h
     static int[] capacidadPasajeros = { 28, 40, 30 };
     // Datos de planetas
@@ -35,7 +35,7 @@ public class App {
 
     // Códigos ANSI
     static final String RESET = "\u001B[0m"; // Restablece el color
-    static final String ORANGE = "\u001B[32m"; // Verde
+    static final String ORANGE = "\u001B[32m"; // Naranja
     static final String BLUE = "\u001B[34m"; // Azul
 
     public static void main(String[] args) throws Exception {
@@ -51,7 +51,7 @@ public class App {
             System.out.println("3. Iniciar la simulación del vuelo");
             System.out.println("4. Exit");
             System.out.println("Por favor, elige una opción: ");
-            if (scanner.hasNextInt()) {
+            if (scanner.hasNextInt()) {// verifica que el valor ingresado es un número
                 opc = scanner.nextInt();
                 switch (opc) {
                     case 1:
@@ -79,10 +79,12 @@ public class App {
     }
 
     private static void startSimulation() {
-        if (planetSelected == 0 || shipSelected == 0) {
+
+        if (planetSelected == 0 && shipSelected == 0) {// valida que se ha seleccionado un planeta o nave espacial 
             System.out.println("Primero debes seleccionar un planeta de destino y una nave espacial");
             return;
         }
+        //mostrar mensajes de la nave espacial
         System.out.println("Inicio del viaje");
         delay();
         System.out.println("Prepárate para el despegue");
@@ -92,20 +94,20 @@ public class App {
         System.out.println("estas viajando en la nave: " + ships[shipSelected - 1] + " con destino a " + planets[planetSelected - 1]);
         System.out.println("velocidad de la nave: " + velocitysShip[shipSelected - 1] + " km/h");
         System.out.printf(    "Tiempo estimado de viaje: %.2f días%n",     estimateTimePerShip(velocitysShip[shipSelected - 1]));
-       // System.out.println( "Tiempo estimado de viaje estimado: " + estimateTimePerShip(velocitysShip[shipSelected - 1]) + " días");
-        int total = 100; // Valor total
-        int incremento = 2; // Incremento de progreso
-        delay5();
-      //  int randomEvent = (int) (Math.random() * 100);
-        int randomEvent = (int) (Math.random() * 50) * 2;
 
-        //evento aletorio
+        //barra de progreso
+        int total = 100; 
+        int incremento = 2; 
+        delay5();
+        //evento aleatorio
+        int randomEvent = (int) (Math.random() * 50) * 2;
         int random = (int) (Math.random() * randomEvents.length);
         String selectedEvent = randomEvents[random];
+        //recorre el progreso iniciando la simulacion
         for (int progreso = 0; progreso <= total; progreso += incremento) {
-            // Mensaje de progreso
+            // calcular el porcentaje de progreso
             int porcentaje = (progreso * 100) / total;
-           
+           //condicion para lanzar el vento aleatorio
             if(randomEvent == progreso){
                 System.out.println("\nEvento aleatorio no esperado: " + selectedEvent);
                 System.out.println("Progreso afectado...");
@@ -123,9 +125,9 @@ public class App {
                         delay();
                         System.out.println("debido al evento aleatorio, el tiempo de llegada se ha extendido");
                         delay();
-                        progreso = progreso - 10;
-                        randomEvent = 0;
-                        porcentaje = (progreso * 100) / total;
+                        progreso = progreso - 10;//afectacion del evento aleatorio
+                        randomEvent = 0;//para que no se presenten mas evcentos
+                        porcentaje = (progreso * 100) / total;//vuelve a calcular el porcentaje
                         break;
 
                     case 2:
@@ -147,18 +149,15 @@ public class App {
             // barra de progreso
             String barra = "[" + "=".repeat(progreso / incremento) + " ".repeat((total - progreso) / incremento) + "]";
             System.out.printf("\nTiempo estimado de llegada: %.2f días\n", estimateTimePerShip(velocitysShip[shipSelected - 1]) * (total - progreso) / 100);
-
             // Mostrar la barra y el porcentaje
             System.out.print("\r" + barra + " " + porcentaje + "%");
-         
+            // mensajes de progreso
             if (progreso == 100 / 2) {
                 System.out.println(" --> has alcanzado la mitad del camino!");
             }
-
             if (progreso == 100) {
                 System.out.println(" --> has llegado al destino");
             }
-
             switch (progreso) {
                 case 25:
                     System.out.println("\nEtapa 1: 25 km completados. Buen trabajo");
@@ -168,12 +167,13 @@ public class App {
                     System.out.println("\nEtapa 2: 75 km completados. ¡Casi llegas!");
                     break;
             }
-            // retraso
+            // tiempo de espera del progreso en general
             delay();
         }
     }
 
     private static void delay() {
+        //retraso de 1 segundo
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -190,6 +190,7 @@ public class App {
     }
 
     public static void selectPlanet() {
+        //menu para seleccionar un planeta
         System.out.println(BLUE + "\n---Seleccionar un planeta de destino---" + RESET);
         System.out.println("1. Marte");
         System.out.println("2. Júpiter");
@@ -201,6 +202,7 @@ public class App {
         String confirm;
         switch (planet) {
             case 1:
+            //confirmar la seleccion del planeta
                 System.out.println("estas seguro de selecionar " + planets[planet - 1] + " (si/no)");
                 confirm = scanner.next();
 
@@ -253,6 +255,7 @@ public class App {
     }
 
     private static void showDataPlanets(int planet) {
+        //mostrar los datos del planeta seleccionado
         double estimateTime = calculateTime(distances[planet - 1]);
         System.out.println("Has seleccionado el planeta " + planets[planet - 1]);
         System.out.println(descriptionPlanets[planet - 1]);
@@ -283,10 +286,12 @@ public class App {
     };
 
     public static void selectSpaceship() {
+        //verificar que se ha seleccionado un planeta y nave espacial
         if (planetSelected == 0) {
             System.out.println("Primero debes seleccionar un planeta de destino");
             return;
         }
+        //menu para seleccionar una nave espacial
         System.out.println("\n--- Naves Disponibles ---");
         System.out.println("1. Falcon 9");
         System.out.println("2. Starship");
@@ -296,15 +301,15 @@ public class App {
         var spaceShip = scanner.nextInt();
         switch (spaceShip) {
             case 1:
-                selectionShipgetPasajeros(spaceShip);
+                showInformationShip(spaceShip);
                 break;
 
             case 2:
-                selectionShipgetPasajeros(spaceShip);
+                showInformationShip(spaceShip);
                 break;
 
             case 3:
-                selectionShipgetPasajeros(spaceShip);
+                showInformationShip(spaceShip);
                 break;
 
             case 4:
@@ -317,7 +322,7 @@ public class App {
         }
     }
 
-    private static void selectionShipgetPasajeros(int spaceShip) {
+    private static void showInformationShip(int spaceShip) {
         int pasajeros;
         System.out.println("Has seleccionado la nave " + ships[spaceShip - 1] + " con velocidad de: "
                 + velocitysShip[spaceShip - 1] + " km/h y " + capacidadPasajeros[spaceShip - 1] + " tripulantes");
