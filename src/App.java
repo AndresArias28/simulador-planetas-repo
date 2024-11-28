@@ -5,13 +5,13 @@ public class App {
     static double[] distances = { 54_600_000, 590_000_000, 1_200_000_000 }; // km
     static double realResourceOxygen = 0;
     static double estimateTimeF;
-    // planets description
+    // descripcion de polanetass
     static String[] descriptionPlanets = {
             "Marte es el llamado planeta rojo en la mitología romana, seleccionado por su color rojizo, este planeta es el cuarto en el sistema solar y el segundo más pequeño después de Mercurio",
             "Júpiter es el planeta mas grande del sistema solar y el segundo mas grande despues de Marte",
             "Saturno es el planeta mas grande del sistema solar y el tercer mas grande despues de Júpiter"
     };
-    // Datos de nave
+    // datos de naves
     static String[] ships = { "Falcon 9", "Starship", "Soyus" };
     static double[] velocitysShip = { 27_000, 40_000, 29_000 }; // en km/h
     static int[] capacidadPasajeros = { 28, 40, 30 };
@@ -36,25 +36,23 @@ public class App {
     static int shipSelected = 0;
     static int planetSelected = 0;
 
-    // static double oxygenAdjust = 0;
-    // static double disminucionRe = 0;
-
-    // Códigos ANSI
-    static final String RESET = "\u001B[0m"; // Restablece el color
-    static final String ORANGE = "\u001B[32m"; // Naranja
-    static final String BLUE = "\u001B[34m"; // Azul
-    static final String GREEN = "\u001B[36m"; // Verde
-    static final String YELLOW = "\u001B[33m"; // Amarillo
+    // Códigos ANSI para colores
+    static final String RESET = "\u001B[0m"; 
+    static final String GREEN = "\u001B[32m"; 
+    static final String BLUE1 = "\u001B[34m"; 
+    static final String BLUE = "\u001B[36m"; //azul
+    static final String YELLOW = "\u001B[33m"; 
 
     public static void main(String[] args) throws Exception {
         Menu();
+        scanner.close();
     }
     
     public static void Menu() {
         int opc;
         do {
-            System.out.println(ORANGE + "\n---Menú Principal---" + RESET);
-            System.out.println("1. Seleccion planeta de destino");
+            System.out.println(BLUE + "\n---Menú Principal---" + RESET);
+            System.out.println("1. Seleccionar un planeta como destino");
             System.out.println("2. Seleccionar una nave espacial");
             System.out.println("3. Iniciar la simulación del vuelo");
             System.out.println("4. Exit");
@@ -75,7 +73,7 @@ public class App {
                         System.out.println("Has salido del programa");
                         break;
                     default:
-                        System.out.println("opción no valida");
+                        System.out.println("opción no válida");
                         break;
                 }
             } else {
@@ -88,64 +86,62 @@ public class App {
 
     public static void selectPlanet() {
         // menu para seleccionar un planeta
-        System.out.println(BLUE + "\n---Seleccionar un planeta de destino---" + RESET);
-        System.out.println("1. Marte");
-        System.out.println("2. Júpiter");
-        System.out.println("3. Saturno");
-        System.out.println("4. Revisar y ajustar recursos");
-        System.out.println("5. exit");
-        System.out.println("Elige una opción: ");
-        var planet = scanner.nextInt();
+        int planet;
+        do{
+            System.out.println(BLUE + "\n---Seleccionar un planeta de destino---" + RESET);
+            System.out.println("1. Marte");
+            System.out.println("2. Júpiter");
+            System.out.println("3. Saturno");
+            System.out.println("4. Regresar al menú principal");
+            System.out.print("Elige una opción: ");
+            planet = scanner.nextInt();
+           // scanner.nextLine();//leer el resto de la cadena--limpiar el buffer
+            switch (planet) {
+                case 1:
+                    // confirmar la seleccion del planeta
+                    validarSeleccion(planet);
+                    break;
+
+                case 2:
+                    validarSeleccion(planet);
+                    break;
+
+                case 3:
+                    validarSeleccion(planet);
+                    break;
+
+                case 4:
+                    System.out.println("Has salido del programa");
+                    break;
+
+                default:
+                    System.out.println("ingresa opción válida");
+                    break;
+            }
+            if(planet != 4){
+                pressEnter(scanner);
+            }
+        }while(planet != 4);
+    }
+
+    public static void pressEnter(Scanner scanner) {
+        System.out.print("Presiona Enter para continuar...");
+        scanner.nextLine();
+    }
+
+    private static void validarSeleccion(int planet) {
         String confirm;
-        switch (planet) {
-            case 1:
-                // confirmar la seleccion del planeta
-                System.out.println("estas seguro de selecionar " + planets[planet - 1] + " (si/no)");
-                confirm = scanner.next();
+        System.out.println("estas seguro de selecionar " + planets[planet - 1] + " (si/no)");
+        confirm = scanner.next();
+        //limpiar buffer
+        scanner.nextLine();
 
-                if (confirm.equals("si")) {
-                    showDataPlanets(planet);
+        if (confirm.equals("si")) {
+            showDataPlanets(planet);
 
-                } else {
-                    System.out.println("ingresaste mal la opción o escogiste NO");
-                }
-                break;
-
-            case 2:
-                System.out.println("estas seguro de selecionar Jupiter? (si/no)");
-                confirm = scanner.next();
-                if (confirm.equals("si")) {
-                    showDataPlanets(planet);
-                } else {
-                    System.out.println("ingresaste mal la opción o escogiste NO");
-                }
-                break;
-
-            case 3:
-                System.out.println("estas seguro de selecionar Saturno? (si/no)");
-                confirm = scanner.next();
-
-                if (confirm.equals("si")) {
-                    showDataPlanets(planet);
-                } else {
-                    System.out.println("ingresaste mal la opción o escogiste NO");
-                }
-                break;
-
-            case 4:
-                adjustResources();
-
-                break;
-
-            case 5:
-                System.out.println("Has salido del programa");
-                break;
-
-            default:
-                System.out.println("opcion no válida");
-                break;
+        } else {
+            System.out.println("ingresaste mal la opción o escogiste NO");
         }
-        
     }
 
     private static void adjustResources() {
@@ -204,7 +200,7 @@ public class App {
         System.out.println("Has seleccionado el planeta " + planets[planet - 1]);
         System.out.println(descriptionPlanets[planet - 1]);
         System.out.println("La distancia a " + planets[planet - 1] + " es: " + distances[planet - 1] + " km");
-        System.out.printf("El tiempo de viaje a una velocidad de %.0f km/h tarda %.2f días%n", velocity, estimateTime);
+        System.out.printf("El tiempo de viaje a una velocidad de %.0f km/h tardaría %.2f días%n", velocity, estimateTime);
         planetSelected = planet;
     }
 
