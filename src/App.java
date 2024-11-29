@@ -3,8 +3,10 @@ import java.util.Scanner;
 public class App {
     static Scanner scanner = new Scanner(System.in);
     static double[] distances = { 54_600_000, 590_000_000, 1_200_000_000 }; // km
-    static double realResourceOxygen = 0;
     static double estimateTimeF;
+    static double kgComida;
+    static double ltAgua;
+    static double lltCombustible;
     // descripcion de polanetass
     static String[] descriptionPlanets = {
             "Marte es el llamado planeta rojo en la mitología romana, seleccionado por su color rojizo, este planeta es el cuarto en el sistema solar y el segundo más pequeño después de Mercurio",
@@ -26,7 +28,8 @@ public class App {
             "Objeto no identificado en la trayectoria"
     };
     static double velocity = 100_000; // km/h
-    static double[] averages = { 550, 1.7, 2.5, 350 };// {litros/dia, kg/dia , litros/dia, Ton/dia} - oxigeno, comida,  agua, combustible
+    static double[] averages = { 550, 1.7, 2.5, 350 };// {litros/dia, kg/dia , litros/dia, Ton/dia} - oxigeno, comida,
+                                                      // agua, combustible
     static String[] resources = { "oxigeno", "comida", "agua", "combustible" };
 
     // ajustar recursos
@@ -37,17 +40,17 @@ public class App {
     static int shipSelected = 0;
     static int planetSelected = 0;
     // Códigos ANSI para letras del terminal
-    static final String RESET = "\u001B[0m"; 
-    static final String GREEN = "\u001B[32m"; 
-    static final String ORANGE = "\u001B[34m"; 
-    static final String BLUE = "\u001B[36m"; 
-    static final String YELLOW = "\u001B[33m"; 
+    static final String RESET = "\u001B[0m";
+    static final String GREEN = "\u001B[32m";
+    static final String ORANGE = "\u001B[34m";
+    static final String BLUE = "\u001B[36m";
+    static final String YELLOW = "\u001B[33m";
 
     public static void main(String[] args) throws Exception {
         Menu();
         scanner.close();
     }
-    
+
     public static void Menu() {
         int opc;
         do {
@@ -87,7 +90,7 @@ public class App {
     public static void selectPlanet() {
         // menu para seleccionar un planeta
         int planet;
-        do{
+        do {
             System.out.println(BLUE + "\n---Seleccionar un planeta de destino---" + RESET);
             System.out.println("1. Marte");
             System.out.println("2. Júpiter");
@@ -96,7 +99,6 @@ public class App {
             System.out.print("Elige una opción: ");
             if (scanner.hasNextInt()) {
 
-                    
             }
             planet = scanner.nextInt();
             switch (planet) {
@@ -121,10 +123,10 @@ public class App {
                     System.out.println("ingresa opción válida");
                     break;
             }
-            if(planet != 4){
+            if (planet != 4) {
                 pressEnter(scanner);
             }
-        }while(planet != 4);
+        } while (planet != 4);
     }
 
     public static void pressEnter(Scanner scanner) {
@@ -136,7 +138,7 @@ public class App {
         String confirm;
         System.out.println("estas seguro de selecionar " + planets[planet - 1] + " (si/no)");
         confirm = scanner.next();
-        //limpiar buffer
+        // limpiar buffer
         scanner.nextLine();
 
         if (confirm.equals("si")) {
@@ -150,7 +152,7 @@ public class App {
     private static void adjustResources() {
         var recursoOxy = calculateResources(estimateTimePerShip(velocitysShip[shipSelected - 1]), averages[0]);
         // menu para ajustar los recursos
-        System.out.println(YELLOW+" ---Ajustar recursos---"+RESET);
+        System.out.println(YELLOW + " ---Ajustar recursos---" + RESET);
         System.out.printf("Los recursos actuales de oxígeno según la nave seleccionada: %.2f litros%n", recursoOxy);
         System.out.println("desea ajustar recursos? elige una opción: ");
         System.out.println("1. Ajustar oxigeno");
@@ -163,21 +165,27 @@ public class App {
 
         switch (adjust) {
             case 1:
-                System.out.println("Cuantos litros de oxigeno deseas agregar?");
+                System.out.println("Cuantos litros de " + resources[adjust - 1] + " deseas agregar?");
                 litrosOxigeno = scanner.nextDouble();
-                System.out.println("Has agregado " + litrosOxigeno + " litros de oxigeno");
+                System.out.println("Has agregado " + litrosOxigeno + " litros de " + resources[adjust - 1]);
                 break;
 
             case 2:
-                System.out.println("Ajustar comida");
+                System.out.println("Cuantos kg de " + resources[adjust - 1] + " deseas agregar?");
+                kgComida = scanner.nextDouble();
+                System.out.println("Has agregado " + kgComida + " Kg de " + resources[adjust - 1]);
                 break;
 
             case 3:
-                System.out.println("Ajustar agua");
+                System.out.println("Cuantos lts de " + resources[adjust - 1] + " deseas agregar?");
+                ltAgua = scanner.nextDouble();
+                System.out.println("Has agregado " + ltAgua + " Kg de " + resources[adjust - 1]);
                 break;
 
             case 4:
-                System.out.println("Ajustar combustible");
+                System.out.println("Cuantos lts de " + resources[adjust - 1] + " deseas agregar?");
+                lltCombustible = scanner.nextDouble();
+                System.out.println("Has agregado " + lltCombustible + " lt de " + resources[adjust - 1]);
                 break;
 
             case 5:
@@ -193,12 +201,11 @@ public class App {
     private static void showDataPlanets(int planet) {
         // mostrar los datos del planeta seleccionado
         double estimateTime = calculateTime(distances[planet - 1]);
-        
-
         System.out.println("Has seleccionado  " + planets[planet - 1]);
         System.out.println(descriptionPlanets[planet - 1]);
         System.out.printf("La distancia a %s es: %,.0f km%n", planets[planet - 1], distances[planet - 1]);
-        System.out.printf("El tiempo de viaje a una velocidad de %.0f km/h tardaría %.2f días%n", velocity, estimateTime);
+        System.out.printf("El tiempo de viaje a una velocidad de %.0f km/h tardaría %.2f días%n", velocity,
+                estimateTime);
         planetSelected = planet;
     }
 
@@ -225,16 +232,16 @@ public class App {
             return;
         }
         var spaceShip = 0;
-        do{
-        // menu para seleccionar una nave espacial
-            System.out.println(ORANGE + "\n--- Naves Disponibles ---"+ RESET);
+        do {
+            // menu para seleccionar una nave espacial
+            System.out.println(ORANGE + "\n--- Naves Disponibles ---" + RESET);
             System.out.println("1. Falcon 9");
             System.out.println("2. Starship");
             System.out.println("3. Soyus");
             System.out.println("4. Regresas al menu anterior");
             System.out.println("Elige una opción");
 
-            //valida si la entrada es un nuemro
+            // valida si la entrada es un nuemro
             if (!scanner.hasNextInt()) {
                 System.out.println("Por favor, ingresa un número válido.");
                 scanner.next(); // Consumir la entrada inválida
@@ -262,144 +269,160 @@ public class App {
                     System.out.println("opcion no válida a");
                     break;
             }
-    }while(spaceShip != 4);
+        } while (spaceShip != 4);
     }
 
     private static void showInformationShip(int spaceShip) {
         int pasajeros;
-        System.out.println("Has seleccionado la nave " + ships[spaceShip - 1] + " con velocidad de: "     + velocitysShip[spaceShip - 1] + " km/h y " + capacidadPasajeros[spaceShip - 1] + " tripulantes");
-        
-        // validar ingrese datos correctos
+        var option = 0;
+        var timeEstimate = estimateTimePerShip(velocitysShip[spaceShip - 1]);
+
+        System.out.println("Has seleccionado la nave " + ships[spaceShip - 1] + " con velocidad de: "
+                + velocitysShip[spaceShip - 1] + " km/h y " + capacidadPasajeros[spaceShip - 1] + " tripulantes");
+
+        // validar datos correctos
         do {
-            System.out.println("Ingresa el número de pasajeros (mayor a 0 y menor o igual a " + capacidadPasajeros[spaceShip - 1] + "): ");
+            System.out.println("Ingresa el número de pasajeros (mayor a 0 y menor o igual a "
+                    + capacidadPasajeros[spaceShip - 1] + "): ");
             pasajeros = scanner.nextInt();
 
             if (pasajeros <= 0) {
                 System.out.println("El número de pasajeros debe ser mayor a 0.");
 
             } else if (pasajeros > capacidadPasajeros[spaceShip - 1]) {
-                System.out.println("La nave " + ships[spaceShip - 1] + " no puede llevar tantos pasajeros. Selecciona un número menor o igual a "
+                System.out.println("La nave " + ships[spaceShip - 1]
+                        + " no puede llevar tantos pasajeros. Selecciona un número menor o igual a "
                         + capacidadPasajeros[spaceShip - 1]);
             }
         } while (pasajeros <= 0 || pasajeros > capacidadPasajeros[spaceShip - 1]);
-        System.out.println("Has seleccionado " + pasajeros + " pasajeros.");
-        shipSelected = spaceShip;
 
-        var timeEstimate = estimateTimePerShip(velocitysShip[spaceShip - 1]);
+        System.out.println("Has seleccionado " + pasajeros + " pasajeros.");
         System.out.printf("El tiempo de viaje estimado segun la velocidad de la nave es: %.2f días%n", timeEstimate);
         System.out.println("Se necesitan los siguientes recursos para el viaje: ");
-        System.out.printf("Oxígeno: %.2f litros%n", calculateResources(timeEstimate, averages[0]));
-        System.out.printf("Comida: %.2f kg%n", calculateResources(timeEstimate, averages[1]));
-        System.out.printf("Agua: %.2f litros%n", calculateResources(timeEstimate, averages[2]));
-        System.out.printf("combustible: %.2f Ton%n", calculateResources(timeEstimate, averages[3]));
-        var option = 0;
-        do{
+        displayResources(timeEstimate);
+        do {
             System.out.println("desea ajustar los recursos antes de iniciar el viaje? ");
             System.out.println("1. Si");
             System.out.println("2. No");
             System.out.println("3. Salir");
             System.out.println("Elige una opción: ");
-             // Validar si la entrada es un número
+            // Validar si la entrada es un numero
             if (!scanner.hasNextInt()) {
                 System.out.println("Por favor, ingresa un número válido.");
                 scanner.next(); // Consumir la entrada inválida
                 continue;
             }
-
             option = scanner.nextInt();
-           
-            //validar el tipo de datos
+
+            // validar el tipo de datos
             if (option < 1 || option > 3) {
-                System.out.println("Opción no válida");
+                System.out.println("ingresa una opción válida");
                 continue;
             }
+
             if (option == 1) {
                 adjustResources();
                 option = 3;
             } else if (option == 2) {
-                //startSimulation();
                 break;
             } else {
                 System.out.println("Has salido del programa");
             }
-        }while(option != 3);
+
+        } while (option != 3);
 
         shipSelected = spaceShip;
     }
 
-    private static void startSimulation() {  
+    private static void displayResources(double timeEstimate) {
+        for (int i = 0; i < resources.length; i++) {
+            System.out.printf("%s: %.2f %s%n", resources[i], calculateResources(timeEstimate, averages[i]),
+                    i == 3 ? "Ton" : i == 1 ? "kg" : "litros");
+        }
+
+    }
+
+    private static void startSimulation() {
+        double realResourceFood;
+        double realResourceWatter;
+        double realResourceGas;
+        double realResourceOxygen;
+        // barra de progreso
+        int total = 100;
+        int incremento = 2;
+        // evento aleatorio
+        int randomEvent = (int) (Math.random() * 50) * 2;// para q los eventos se disparen un un progereso par
+        int random = (int) (Math.random() * randomEvents.length);
+        String selectedEvent = randomEvents[random];
+        
         if (planetSelected == 0 && shipSelected == 0) {// valida que se ha seleccionado un planeta o nave espacial
             System.out.println("Primero debes seleccionar un planeta de destino y una nave espacial");
             return;
         }
         // mostrar mensajes del viaje
         System.out.println("Inicio del viaje");
-        delay();
+        delay(1);
         System.out.println("Prepárate para el despegue");
-        delay();
+        delay(1);
         System.out.println("Despegando en 3, 2, 1...");
-        delay();
-        System.out.println("estas viajando en la nave: " + ships[shipSelected - 1] + " con destino a " + planets[planetSelected - 1]);
+        delay(1);
+        System.out.println("estas viajando en la nave: " + ships[shipSelected - 1] + " con destino a "
+                + planets[planetSelected - 1]);
 
         System.out.println("velocidad de la nave: " + velocitysShip[shipSelected - 1] + " km/h");
 
         System.out.printf("Tiempo estimado de viaje: %.2f días%n",
                 estimateTimePerShip(velocitysShip[shipSelected - 1]));
 
-        // barra de progreso
-        int total = 100;
-        int incremento = 2;
-        delay5();
+        delay(3);
         estimateTimeF = estimateTimePerShip(velocitysShip[shipSelected - 1]);
+        realResourceOxygen = calculateResources(estimateTimeF, averages[0]) + litrosOxigeno;
+        realResourceFood = calculateResources(estimateTimeF, averages[1]) + kgComida;
+        realResourceWatter = calculateResources(estimateTimeF, averages[2]) + ltAgua;
+        realResourceGas = calculateResources(estimateTimeF, averages[3]) + lltCombustible;
 
-        realResourceOxygen  = calculateResources(estimateTimeF, averages[0]) + litrosOxigeno;
-
-        // evento aleatorio
-        int randomEvent = (int) (Math.random() * 50) * 2;// para q los eventos se disparen un un progereso par
-        int random = (int) (Math.random() * randomEvents.length);
-        String selectedEvent = randomEvents[random];
 
         // recorre el progreso iniciando la simulacion
-        for (int progreso = 0; progreso <= total; progreso += incremento) { 
-   
+        for (int progreso = 0; progreso <= total; progreso += incremento) {
+
             int porcentaje = (progreso * 100) / total;
+            var option = 0;
 
             // condicion para lanzar el vento aleatorio
             if (randomEvent == progreso) {
 
                 System.out.println("\nEvento aleatorio no esperado: " + selectedEvent);
                 System.out.println("Progreso afectado...");
-                delay();
+                delay(1);
                 System.out.println("que opcines desea tomar? ");
                 System.out.println("1. Reparar Nave");
                 System.out.println("2. Desviar el rumbo al planeta mas cercano");
                 System.out.println("3. Salir");
-                var option = scanner.nextInt();
-                
+                option = scanner.nextInt();
+
                 switch (option) {
                     case 1:
                         System.out.println("Reparando la nave...");
-                        delay();
+                        delay(1);
                         System.out.println("Reparación completada. Continua el viaje...");
-                        delay();
+                        delay(1);
                         System.out.println("debido al evento aleatorio, el tiempo de llegada se ha extendido");
-                        delay();
-                        if(progreso >10){
+                        delay(1);
+                        if (progreso > 10) {
                             progreso = progreso - 10;// afectacion del evento aleatorio
                             randomEvent = 0;// para que no se presenten mas evcentos
                             porcentaje = (progreso * 100) / total;// vuelve a calcular el porcentaje
-                        }else{
+                        } else {
                             progreso = progreso - 2;// afectacion del evento aleatorio
                             randomEvent = 0;// para que no se presenten mas evcentos
                             porcentaje = (progreso * 100) / total;// vuelve a calcular el porcentaje
                         }
 
-                        
                         break;
 
                     case 2:
                         System.out.println("Desviando el rumbo al planeta mas cercano...");
-                        delay();
+                        delay(1);
                         progreso = 90;
                         porcentaje = (progreso * 100) / total;
                         randomEvent = 0;
@@ -417,16 +440,13 @@ public class App {
 
             // barra de progreso
             String barra = "[" + "=".repeat(progreso / incremento) + " ".repeat((total - progreso) / incremento) + "]";
-
             System.out.printf("\nTiempo estimado de llegada: %.2f días\n", estimateTimeF * (total - progreso) / 100);
+            System.out.printf("el oxigeno actual: %.2f \n", realResourceOxygen * (total - progreso) / 100);
+            System.out.printf("la comida actual: %.2f \n", realResourceFood * (total - progreso) / 100);
+            System.out.printf("la agua actual: %.2f \n", realResourceWatter * (total - progreso) / 100);
+            System.out.printf("el combustible actual: %.2f \n", realResourceGas * (total - progreso) / 100);
 
-            System.out.printf("el oxigeno actual: %.2f \n", realResourceOxygen  * (total - progreso)/ 100);
 
-            // if (calculateResources(estimateTimeF, averages[0]) * ((total - (progreso )) / 100) <= 0) {
-            //     System.out.println(
-            //             "no tienes suficiente oxígeno para continuar el viaje, desvio al planeta mas cercano...");
-            //     break;
-            // }
             // Mostrar la barra y el porcentaje
             System.out.print("\r" + barra + " " + porcentaje + "%");
             // mensajes de progreso
@@ -435,7 +455,7 @@ public class App {
             }
             if (progreso == 100) {
                 // System.out.println(" --> has llegado al destino");
-                //finalizar el programa
+                // finalizar el programa
                 System.out.println("\nHas llegado a " + planets[planetSelected - 1]);
                 System.out.println("Fin del viaje");
                 break;
@@ -450,22 +470,14 @@ public class App {
                     break;
             }
             // tiempo de espera del progreso en general
-            delay();
+            delay(1);
         }
     }
 
-    private static void delay() {
+    private static void delay(int seconds) {
         // retraso de 1 segundo
         try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            System.out.println("Error en la simulación: " + e.getMessage());
-        }
-    }
-
-    private static void delay5() {
-        try {
-            Thread.sleep(5000);
+            Thread.sleep(seconds * 1000);
         } catch (InterruptedException e) {
             System.out.println("Error en la simulación: " + e.getMessage());
         }
