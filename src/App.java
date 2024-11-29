@@ -26,8 +26,9 @@ public class App {
             "Objeto no identificado en la trayectoria"
     };
     static double velocity = 100_000; // km/h
-    static double[] averages = { 550, 1.7, 2.5, 350 };// {litros/dia, kg/dia , litros/dia, Ton/dia} - oxigeno, comida,
-                                                      // agua, combustible
+    static double[] averages = { 550, 1.7, 2.5, 350 };// {litros/dia, kg/dia , litros/dia, Ton/dia} - oxigeno, comida,  agua, combustible
+    static String[] resources = { "oxigeno", "comida", "agua", "combustible" };
+
     // ajustar recursos
     static double litrosOxigeno = 0;
     static double toneladasCombustible = 0;
@@ -35,12 +36,11 @@ public class App {
     // ajustes seleccionddaos
     static int shipSelected = 0;
     static int planetSelected = 0;
-
-    // Códigos ANSI para colores
+    // Códigos ANSI para letras del terminal
     static final String RESET = "\u001B[0m"; 
     static final String GREEN = "\u001B[32m"; 
-    static final String BLUE1 = "\u001B[34m"; 
-    static final String BLUE = "\u001B[36m"; //azul
+    static final String ORANGE = "\u001B[34m"; 
+    static final String BLUE = "\u001B[36m"; 
     static final String YELLOW = "\u001B[33m"; 
 
     public static void main(String[] args) throws Exception {
@@ -51,11 +51,11 @@ public class App {
     public static void Menu() {
         int opc;
         do {
-            System.out.println(BLUE + "\n---Menú Principal---" + RESET);
+            System.out.println(GREEN + "\n---Menú Principal---" + RESET);
             System.out.println("1. Seleccionar un planeta como destino");
             System.out.println("2. Seleccionar una nave espacial");
             System.out.println("3. Iniciar la simulación del vuelo");
-            System.out.println("4. Exit");
+            System.out.println("4. Salir");
             System.out.println("Por favor, elige una opción: ");
             if (scanner.hasNextInt()) {// verifica que el valor ingresado es un número
                 opc = scanner.nextInt();
@@ -73,7 +73,7 @@ public class App {
                         System.out.println("Has salido del programa");
                         break;
                     default:
-                        System.out.println("opción no válida");
+                        System.out.println("ingresa una opción válida");
                         break;
                 }
             } else {
@@ -94,8 +94,11 @@ public class App {
             System.out.println("3. Saturno");
             System.out.println("4. Regresar al menú principal");
             System.out.print("Elige una opción: ");
+            if (scanner.hasNextInt()) {
+
+                    
+            }
             planet = scanner.nextInt();
-           // scanner.nextLine();//leer el resto de la cadena--limpiar el buffer
             switch (planet) {
                 case 1:
                     // confirmar la seleccion del planeta
@@ -148,25 +151,20 @@ public class App {
         var recursoOxy = calculateResources(estimateTimePerShip(velocitysShip[shipSelected - 1]), averages[0]);
         // menu para ajustar los recursos
         System.out.println(YELLOW+" ---Ajustar recursos---"+RESET);
-        System.out.println("los recursos actuales de oxigeno segun la nave seleccionada: " + recursoOxy + " litros");
+        System.out.printf("Los recursos actuales de oxígeno según la nave seleccionada: %.2f litros%n", recursoOxy);
         System.out.println("desea ajustar recursos? elige una opción: ");
         System.out.println("1. Ajustar oxigeno");
         System.out.println("2. Ajustar comida");
         System.out.println("3. Ajustar agua");
         System.out.println("4. Ajustar combustible");
-        System.out.println("5. Exit");
+        System.out.println("5. Regresar al menú principal");
         System.out.println("Elige una opcion: ");
         var adjust = scanner.nextInt();
 
         switch (adjust) {
             case 1:
                 System.out.println("Cuantos litros de oxigeno deseas agregar?");
-                System.out.println("ingresa la cantidad de litros de oxigeno que deseas agregar: ");
                 litrosOxigeno = scanner.nextDouble();
-
-                // var oxygenAdjust = calculateResources(planetSelected, averages[adjust - 1]) + litrosOxigeno;
-                // System.out.println("Has agregado " + litrosOxigeno + " litros de oxígeno, ahora tienes " + oxygenAdjust
-                //         + " litros de oxígeno");
                 System.out.println("Has agregado " + litrosOxigeno + " litros de oxigeno");
                 break;
 
@@ -197,9 +195,9 @@ public class App {
         double estimateTime = calculateTime(distances[planet - 1]);
         
 
-        System.out.println("Has seleccionado el planeta " + planets[planet - 1]);
+        System.out.println("Has seleccionado  " + planets[planet - 1]);
         System.out.println(descriptionPlanets[planet - 1]);
-        System.out.println("La distancia a " + planets[planet - 1] + " es: " + distances[planet - 1] + " km");
+        System.out.printf("La distancia a %s es: %,.0f km%n", planets[planet - 1], distances[planet - 1]);
         System.out.printf("El tiempo de viaje a una velocidad de %.0f km/h tardaría %.2f días%n", velocity, estimateTime);
         planetSelected = planet;
     }
@@ -229,11 +227,11 @@ public class App {
         var spaceShip = 0;
         do{
         // menu para seleccionar una nave espacial
-            System.out.println("\n--- Naves Disponibles ---");
+            System.out.println(ORANGE + "\n--- Naves Disponibles ---"+ RESET);
             System.out.println("1. Falcon 9");
             System.out.println("2. Starship");
             System.out.println("3. Soyus");
-            System.out.println("4. Exit");
+            System.out.println("4. Regresas al menu anterior");
             System.out.println("Elige una opción");
 
             //valida si la entrada es un nuemro
