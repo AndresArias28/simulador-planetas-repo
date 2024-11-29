@@ -300,6 +300,7 @@ public class App {
         System.out.printf("El tiempo de viaje estimado segun la velocidad de la nave es: %.2f días%n", timeEstimate);
         System.out.println("Se necesitan los siguientes recursos para el viaje: ");
         displayResources(timeEstimate);
+        shipSelected = spaceShip;
         do {
             System.out.println("desea ajustar los recursos antes de iniciar el viaje? ");
             System.out.println("1. Si");
@@ -331,7 +332,7 @@ public class App {
 
         } while (option != 3);
 
-        shipSelected = spaceShip;
+      
     }
 
     private static void displayResources(double timeEstimate) {
