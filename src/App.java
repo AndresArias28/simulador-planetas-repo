@@ -71,13 +71,13 @@ public class App {
                         break;
                     case 3:
                         startSimulation();
-                        break;
+                    break;
                     case 4:
-                        System.out.println("Has salido del programa");
-                        break;
+                    System.out.println("Has salido del programa");
+                    break;
                     default:
-                        System.out.println("ingresa una opción válida");
-                        break;
+                    System.out.println("ingresa una opción válida");
+                    break;
                 }
             } else {
                 System.out.println("\n por favor, ingresa un número");
@@ -103,31 +103,78 @@ public class App {
             planet = scanner.nextInt();
             switch (planet) {
                 case 1:
-                    // confirmar la seleccion del planeta
-                    validarSeleccion(planet);
-                    break;
-
+                // confirmar la seleccion del planeta
+                validarSeleccion(planet);
+                break;
+                
                 case 2:
-                    validarSeleccion(planet);
-                    break;
-
+                validarSeleccion(planet);
+                break;
+                
                 case 3:
-                    validarSeleccion(planet);
-                    break;
-
+                validarSeleccion(planet);
+                break;
+                
                 case 4:
-                    System.out.println("Has salido del programa");
-                    break;
-
+                System.out.println("Has salido del programa");
+                break;
+                
                 default:
-                    System.out.println("ingresa opción válida");
-                    break;
+                System.out.println("ingresa opción válida");
+                break;
             }
             if (planet != 4) {
                 pressEnter(scanner);
             }
         } while (planet != 4);
     }
+    
+        public static void selectSpaceship() {
+            // verificar que se ha seleccionado un planeta y nave espacial
+            if (planetSelected == 0) {
+                System.out.println("Primero debes seleccionar un planeta de destino");
+                return;
+            }
+            var spaceShip = 0;
+            do {
+                // menu para seleccionar una nave espacial
+                System.out.println(ORANGE + "\n--- Naves Disponibles ---" + RESET);
+                System.out.println("1. Falcon 9");
+                System.out.println("2. Starship");
+                System.out.println("3. Soyus");
+                System.out.println("4. Regresas al menu anterior");
+                System.out.println("Elige una opción");
+    
+                // valida si la entrada es un nuemro
+                if (!scanner.hasNextInt()) {
+                    System.out.println("Por favor, ingresa un número válido.");
+                    scanner.next(); // Consumir la entrada inválida
+                    continue;
+                }
+                spaceShip = scanner.nextInt();
+                switch (spaceShip) {
+                    case 1:
+                        showInformationShip(spaceShip);
+                        break;
+    
+                    case 2:
+                        showInformationShip(spaceShip);
+                        break;
+    
+                    case 3:
+                        showInformationShip(spaceShip);
+                        break;
+    
+                    case 4:
+                        System.out.println("Has salido del programa");
+                        break;
+    
+                    default:
+                        System.out.println("opcion no válida a");
+                        break;
+                }
+            } while (spaceShip != 4);
+        }
 
     public static void pressEnter(Scanner scanner) {
         System.out.print("Presiona Enter para continuar...");
@@ -224,53 +271,6 @@ public class App {
         double timeInDays = timeInHours / 24;
         return timeInDays;
     };
-
-    public static void selectSpaceship() {
-        // verificar que se ha seleccionado un planeta y nave espacial
-        if (planetSelected == 0) {
-            System.out.println("Primero debes seleccionar un planeta de destino");
-            return;
-        }
-        var spaceShip = 0;
-        do {
-            // menu para seleccionar una nave espacial
-            System.out.println(ORANGE + "\n--- Naves Disponibles ---" + RESET);
-            System.out.println("1. Falcon 9");
-            System.out.println("2. Starship");
-            System.out.println("3. Soyus");
-            System.out.println("4. Regresas al menu anterior");
-            System.out.println("Elige una opción");
-
-            // valida si la entrada es un nuemro
-            if (!scanner.hasNextInt()) {
-                System.out.println("Por favor, ingresa un número válido.");
-                scanner.next(); // Consumir la entrada inválida
-                continue;
-            }
-            spaceShip = scanner.nextInt();
-            switch (spaceShip) {
-                case 1:
-                    showInformationShip(spaceShip);
-                    break;
-
-                case 2:
-                    showInformationShip(spaceShip);
-                    break;
-
-                case 3:
-                    showInformationShip(spaceShip);
-                    break;
-
-                case 4:
-                    System.out.println("Has salido del programa");
-                    break;
-
-                default:
-                    System.out.println("opcion no válida a");
-                    break;
-            }
-        } while (spaceShip != 4);
-    }
 
     private static void showInformationShip(int spaceShip) {
         int pasajeros;
